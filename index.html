@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>val</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.0.1"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            text-align: center;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        h1, h2, p {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 3rem;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+        .floating-text {
+            position: absolute;
+            font-size: 1.5rem;
+            color: white;
+            opacity: 1;  /* Fully visible */
+            white-space: nowrap;
+            animation: floatRandom linear infinite;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes floatRandom {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(50vw, 50vh); }
+            100% { transform: translate(0, 0); }
+        }
+        .heart-emoji {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0;
+            animation: floatHearts 5s linear infinite;
+        }
+        @keyframes floatHearts {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+        .moving-button {
+            position: absolute;
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hey Boldie-Locs!💖</h1>
+    <h2>I have a very important (and slightly nerve-wracking) question for you...</h2>
+
+    <div id="floating-texts-container"></div>
+
+    <div id="button-container">
+        <button class="btn btn-danger" onclick="startLoading()">Click to Reveal</button>
+    </div>
+    <br>
+    <div id="question" style="display:none;">
+        <h1>Will You Be My Valentine? 😍</h1>
+        <button class="btn btn-success" onclick="showConfetti()">YES</button>
+        <button class="btn btn-warning moving-button" onmouseover="moveButton(this)">NO</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let delay = 0;
+            for (let i = 0; i < 12; i++) {
+                setTimeout(createFloatingText, delay);
+                delay += 1000;
+            }
+        });
+
+        let stopFloatingTexts = false;
+
+        function createFloatingText() {
+            if (stopFloatingTexts) return;
+
+            const phrases = [
+                "Is this cringe? Absolutely.😂",
+                "Regretting this already? Me too.😂",
+                "Why are you still here?🤔",
+                "100% effort, 0% dignity.🙃",
+                "Romantic? Questionable.😂🤷‍♂️",
+                "Send help. 🚩",
+                "This seemed like a good idea...😂😬",
+                "On a scale of 1 to cringe: YES.😅",
+                "Please pretend this never happened.😂",
+                "Might just hang myself for this one with tissue honestly😂",
+                "In my defense I was bored and didn't know how else to ask😂",
+                "PUSH THE REVEAL BUTTON FAST.😂"
+            ];
+
+            const text = document.createElement("div");
+            text.classList.add("floating-text");
+            text.innerHTML = phrases[Math.floor(Math.random() * phrases.length)];
+            text.style.left = Math.random() * 50 + "vw";
+            text.style.top = Math.random() * 50 + "vh";
+            text.style.animationDuration = Math.random() * 5 + 10 + "s";
+            text.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px)`;
+
+            document.body.appendChild(text);
+            setTimeout(() => { text.remove(); }, 15000);
+        }
+
+        function startLoading() {
+            stopFloatingTexts = true; // Stop further floating texts
+            document.getElementById("floating-texts-container").style.display = "none";
+            document.getElementById("question").style.display = "block";
+            document.querySelectorAll(".floating-text").forEach(el => el.remove());
+        }
+
+
+        function moveButton(button) {
+            button.style.left = Math.random() * 200 + "px";
+            button.style.top = Math.random() * 100 + "px";
+        }
+
+        function showConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            for (let i = 0; i < 20; i++) {
+                createFloatingHeart();
+            }
+        }
+
+        function createFloatingHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart-emoji");
+            heart.innerHTML = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+    </script>
+</body>
+</html>
